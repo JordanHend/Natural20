@@ -1,0 +1,14 @@
+#version 330 core
+layout (location = 0) in vec2 aPos;
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
+uniform float scale;
+void main()
+{
+
+	vec2 pos = aPos * vec2(scale * 0.5, scale);
+	gl_Position = projection * view * model * vec4(pos, 0.0, 1.0);
+}

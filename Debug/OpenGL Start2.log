@@ -1,0 +1,14 @@
+﻿  glad.c
+Main.obj : error LNK2019: unresolved external symbol _glfwInit referenced in function "int __cdecl initOpenGL(void)" (?initOpenGL@@YAHXZ)
+Main.obj : error LNK2019: unresolved external symbol _glfwGetPrimaryMonitor referenced in function "int __cdecl initOpenGL(void)" (?initOpenGL@@YAHXZ)
+Main.obj : error LNK2019: unresolved external symbol _glfwGetVideoMode referenced in function "int __cdecl initOpenGL(void)" (?initOpenGL@@YAHXZ)
+Main.obj : error LNK2019: unresolved external symbol _glfwWindowHint referenced in function "int __cdecl initOpenGL(void)" (?initOpenGL@@YAHXZ)
+Main.obj : error LNK2019: unresolved external symbol _glfwCreateWindow referenced in function "int __cdecl initOpenGL(void)" (?initOpenGL@@YAHXZ)
+Main.obj : error LNK2019: unresolved external symbol _glfwSetWindowShouldClose referenced in function "void __cdecl key_callback(struct GLFWwindow *,int,int,int,int)" (?key_callback@@YAXPAUGLFWwindow@@HHHH@Z)
+Main.obj : error LNK2019: unresolved external symbol _glfwSetFramebufferSizeCallback referenced in function "int __cdecl initOpenGL(void)" (?initOpenGL@@YAHXZ)
+Main.obj : error LNK2019: unresolved external symbol _glfwSetCursorPosCallback referenced in function "int __cdecl initOpenGL(void)" (?initOpenGL@@YAHXZ)
+Main.obj : error LNK2019: unresolved external symbol _glfwMakeContextCurrent referenced in function "int __cdecl initOpenGL(void)" (?initOpenGL@@YAHXZ)
+Main.obj : error LNK2019: unresolved external symbol _glfwGetProcAddress referenced in function "int __cdecl initOpenGL(void)" (?initOpenGL@@YAHXZ)
+C:\Users\Jordan\Documents\C++ Libraries\glfw-3.2.1.bin.WIN64\glfw-3.2.1.bin.WIN64\lib-vc2015\glfw3.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'X86'
+C:\Users\Jordan\Assimp\lib\x64\assimpd.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'X86'
+c:\users\jordan\documents\visual studio 2015\Projects\OpenGL Start2\Debug\OpenGL Start2.exe : fatal error LNK1120: 10 unresolved externals
