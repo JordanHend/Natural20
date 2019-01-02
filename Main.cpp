@@ -54,7 +54,7 @@ glm::mat4 projection;
 GLFWwindow * window;
 Camera camera;
 TextureRenderer * renderer;
-
+Map map;
 //Mouse input
 float lastX = SCREEN_WIDTH / 2.0f;
 float lastY = SCREEN_HEIGHT / 2.0f;
@@ -73,10 +73,16 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 int initOpenGL();
 
 
-float scale = 1.0;
-unsigned int gridVBO, gridVAO, numLines;
- bool gridSetup = false;
+float scale = 1.0f;
 
+
+void APIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+{
+	if(type == GL_DEBUG_TYPE_ERROR)
+	fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n\n",
+		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+		type, severity, message);
+}
 
 int initOpenGL()
 {
@@ -132,55 +138,7 @@ int initOpenGL()
 void drawGrid()
 {
 
-	std::vector<glm::vec2> outline;
-	if (!gridSetup)
-	{
-		float tx = MAP_WIDTH * 100, ty = MAP_HEIGHT * 100;
-		float step = (tx + ty) / 20;
-		int xlength =(tx / step) + 1;
-		int ylength = (ty / step) + 1;
-	
-		for (int y = 0; y < ylength; y++)
-		{
-			outline.push_back(glm::vec2(y*step, 0));
-			outline.push_back(glm::vec2(y*step, ty));
-		}
 
-		for (int x = 0; x < ylength; x++)
-		{
-			outline.push_back(glm::vec2(0, x*step));
-			outline.push_back(glm::vec2(tx, x*step));
-		}
-
-
-		glGenBuffers(1, &gridVBO);
-		glGenVertexArrays(1, &gridVAO);
-		glBindVertexArray(gridVAO);
-		glBindBuffer(GL_ARRAY_BUFFER, gridVBO);
-		glBufferData(GL_ARRAY_BUFFER, outline.size() * sizeof(glm::vec2), &outline[0], GL_STATIC_DRAW);
-		// position attribute
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (void*)0);
-		glEnableVertexAttribArray(0);
-
-		glBindVertexArray(0);
-		numLines = outline.size();
-	}
-	Shader s = ResourceManager::GetShader("grid");
-	s.use();
-	s.setFloat("scale", scale);
-	s.setMat4("model", glm::mat4(1.0f));
-	s.setMat4("view", camera.getViewMatrix());
-	s.setMat4("projection", projection);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glBindVertexArray(gridVAO);
-	glDrawArrays(GL_LINES, 0, outline.size());
-	glBindVertexArray(0);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	GLenum err;
-	while ((err = glGetError()) != GL_NO_ERROR)
-	{
-		//std::cout << "GL ERROR! " << err << std::endl;
-	}
 }
 
 void handleCameraKeyInput(float deltaTime)
@@ -214,18 +172,19 @@ int main()
 
 	//Init OpenGL
 	initOpenGL();
-
-
+	camera.position = glm::vec2(0, 0);
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(MessageCallback, 0);
 	ResourceManager::LoadShader("Shader/GridVertex.shdr", "Shader/GridFrag.shdr", nullptr, "grid");
 	ResourceManager::LoadShader("Shader/sprite.vshdr", "Shader/sprite.fshdr", nullptr, "sprite");
-
-
+	
+	Shader s = ResourceManager::GetShader("sprite");
 	renderer = new TextureRenderer(ResourceManager::GetShader("sprite"));
-
+	map.setRenderer(renderer);
 	//Create GUI
-	gui.init(window, renderer);
+	gui.init(window, &map);
 
-
+	
 	//TEST
 	MAP_WIDTH = 10;
 	MAP_HEIGHT = 10;
@@ -245,7 +204,8 @@ int main()
 		TimeBetweenFrames = (currentFrame - lastFrame);
 		lastFrame = currentFrame;
 		handleCameraKeyInput(deltaTime);
-		projection = glm::ortho(0.0f, (float)MAP_WIDTH * 100, (float)MAP_HEIGHT * 100, 0.0f, -1.0f, 1.0f);
+		s.use();
+	
 		a += TimeBetweenFrames;
 		FPS = (1 / TimeBetweenFrames);
 	
@@ -256,7 +216,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 
-		drawGrid();
+		map.draw();
 
 		//Present gui
 		nk_glfw3_render(NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
@@ -276,6 +236,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	
 }
 
+extern bool dragMap;
 void mouseCallback(GLFWwindow * window, double xpos, double ypos)
 {
 	if (firstMouse)
@@ -288,7 +249,15 @@ void mouseCallback(GLFWwindow * window, double xpos, double ypos)
 
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
-		//nk_window_get_canvas(gui.ctx);
+		bool onWindow = false;
+		for (unsigned int i = 0; i < gui.windowBounds.size(); i++)
+		{
+			if (gui.windowBounds[i].mouseOver(glm::vec2( xpos, ypos)))
+			{
+				onWindow = true;
+			}
+		}
+		if(!onWindow && dragMap)
 		camera.handleDrag(GLFW_PRESS, lastX, lastY, xpos, ypos);
 	}
 	lastX = xpos;
@@ -297,12 +266,23 @@ void mouseCallback(GLFWwindow * window, double xpos, double ypos)
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	scale += yoffset * 0.05;
-	if (scale < 0.1)
-		scale = 0.1;
-	if (scale > 5)
-		scale = 5;
 
+	bool onWindow = false;
+	for (unsigned int i = 0; i < gui.windowBounds.size(); i++)
+	{
+		if (gui.windowBounds[i].mouseOver(glm::vec2(lastX, lastY)))
+		{
+			onWindow = true;
+		}
+	}
+	if (!onWindow)
+	{
+		scale += yoffset * 0.05;
+		if (scale < 0.1)
+			scale = 0.1;
+		if (scale > 5)
+			scale = 5;
+	}
 
 
 	glfw.scroll.x += (float)xoffset;

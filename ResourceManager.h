@@ -12,6 +12,7 @@
 #include "Shader/Shader.h"
 
 
+std::string SplitFilename(const std::string& str);
 
 class ResourceManager
 {

@@ -9,6 +9,6 @@ uniform float scale;
 void main()
 {
 
-	vec2 pos = aPos * vec2(scale * 0.5, scale);
+	vec2 pos = aPos * vec2(scale, scale);
 	gl_Position = projection * view * model * vec4(pos, 0.0, 1.0);
 }

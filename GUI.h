@@ -12,10 +12,12 @@
 #include <limits.h>
 #include <time.h>
 
-#include <glfw3.h>
-#include <glad\glad.h>
-#include "TextureRenderer.h"
 
+#include "TextureRenderer.h"
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/quaternion.hpp>
 #ifndef NUK_H
 #define NUK_H
 #include <stdio.h>
@@ -32,10 +34,7 @@
 #include <vector>
 #include <glfw3.h>
 #include <glad\glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/quaternion.hpp>
+
 
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
@@ -51,30 +50,17 @@
 
 #include "Texture2D.h"
 #include "Rect.h"
+#include "OpenFile.h"
+#include "ResourceManager.h"
+#include "Map.h"
 
-
-
-
-struct Object
-{
-	std::string name;
-	Texture2D tex;
-	Rect rect;
-	glm::vec2 pos;
-	glm::vec2 rotation;
-};
-
-struct BackgroundObject
-{
-	Texture2D tex;
-	Rect rect;
-	glm::vec2 pos;
-
-};
 
 
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
+
+#define GM_LAYER 0
+#define PLAYER_LAYER 1
 
 
 
@@ -83,21 +69,60 @@ class GUI
 {
 public:
 	GUI();
-	GUI(GLFWwindow * window, TextureRenderer * rend);
-	void init(GLFWwindow * window, TextureRenderer * rend);
+	GUI(GLFWwindow * window, Map * map);
+	void init(GLFWwindow * window, Map * map);
 	void draw();
 	
+	std::vector<Rect> windowBounds;
+
 	//GUI handlers. Done by Nuklear.
 	struct nk_context *ctx;
 	struct nk_colorf bg;
 	~GUI();
 private:
 	
+	Map * map;
+
+	int defaultLayer = 0;
 	bool showGMLayer = false;
-	std::vector<Object> objects;
-	std::vector<BackgroundObject> backgroundObjects;
-	Texture2D background;
-	TextureRenderer * renderer;
+	std::vector<Token> tokens;
+
+	struct NewObjectInfo
+	{
+		std::string name;
+		std::string texture;
+		int layer = 0;
+	};
+
+	char mapnamebuff[20];
+	char xbuff[6], ybuff[6];
+	void renderMenuBar();
+
+
+	
+	std::vector<Rect> bounds;
+
+
+	bool mainPanelInBackground = false;
+
+	bool newMapWindow = false;
+	void renderNewMap();
+
+	std::string objStrTexName = std::string();
+	char objnamebuff[20], objTextureName[200];
+	bool newObjectWindow = false;
+	void renderNewObjectWindow();
+	NewObjectInfo objinfo;
+
+	bool newBGObjectWindow = false;
+	void renderNewBGObjectWindow();
+
+	void setUpBackgroundTexture();
+
+
+
+
+
 };
 
 #endif

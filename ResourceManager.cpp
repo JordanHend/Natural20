@@ -6,6 +6,12 @@
 
 #include "Includes\stb_image.h"
 
+std::string SplitFilename(const std::string& str)
+{
+	std::size_t found = str.find_last_of("/\\");
+	return(str.substr(found + 1));
+}
+
 std::map<std::string, Texture2D>    ResourceManager::Textures;
 std::map<std::string, Shader>       ResourceManager::Shaders;
 
@@ -61,10 +67,22 @@ Texture2D ResourceManager::loadTextureFromFile(const GLchar *file, GLboolean alp
 	}
 
 	int width, height, nrComponents;
+
+
 	unsigned char *image = stbi_load(file, &width, &height, &nrComponents, 0);
 	if (image)
 	{
 	
+		GLenum format;
+		if (nrComponents == 1)
+			format = GL_RED;
+		else if (nrComponents == 3)
+			format = GL_RGB;
+		else if (nrComponents == 4)
+			format = GL_RGBA;
+
+		texture.Internal_Format = GL_RGBA;
+		texture.Image_Format = format;
 		texture.Generate(width, height, image);
 		stbi_image_free(image);
 	}
