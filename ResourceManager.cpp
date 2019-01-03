@@ -27,6 +27,17 @@ Shader ResourceManager::GetShader(std::string name)
 	return Shaders[name];
 }
 
+bool ResourceManager::hasTexture(std::string name)
+{
+
+	std::map<std::string, Texture2D>::iterator it = ResourceManager::Textures.find(name);
+	if (it != ResourceManager::Textures.end())
+	{
+		return true;
+	}
+	return false;
+}
+
 Texture2D ResourceManager::LoadTexture(const GLchar *file, GLboolean alpha, std::string name)
 {
 	Textures[name] = loadTextureFromFile(file, alpha);

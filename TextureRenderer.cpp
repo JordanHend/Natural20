@@ -38,6 +38,8 @@ void TextureRenderer::DrawSprite(Texture2D &texture, glm::vec2 position,
 	// Prepare transformations
 	this->shader.use();
 	glm::mat4 model;
+
+	model = glm::scale(model, glm::vec3(scale));
 	model = glm::translate(model, glm::vec3(position, 0.0f));
 
 	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));
@@ -45,7 +47,7 @@ void TextureRenderer::DrawSprite(Texture2D &texture, glm::vec2 position,
 	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
 
 	model = glm::scale(model, glm::vec3(size, 1.0f));
-	model = glm::scale(model, glm::vec3(scale, scale, 1.0f));
+
 	this->shader.setMat4("model", model);
 	this->shader.setVec3("spriteColor", color);
 

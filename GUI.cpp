@@ -109,7 +109,7 @@ void GUI::draw()
 						tokens.erase(tokens.begin() + i);
 					}
 				}
-				
+			
 
 				/*
 				nk_layout_row_dynamic(ctx, 120, 1);
@@ -122,6 +122,23 @@ void GUI::draw()
 				nk_combo_end(ctx);
 				*/
 				nk_combo_end(ctx);
+			}
+
+			nk_layout_row_dynamic(ctx, 15, 1);
+			nk_spacing(ctx, 1);
+
+			nk_layout_row_begin(ctx, NK_STATIC, 30, 1);
+			nk_layout_row_push(ctx, 120);
+			if (nk_button_label(ctx, "Board BG"))
+			{
+				std::string tex = openTextureFile();
+				std::string name = SplitFilename(tex);
+				if (!ResourceManager::hasTexture(name))
+				{
+					ResourceManager::LoadTexture(tex.c_str(), true, name);
+				}
+				map->setBGTexture(ResourceManager::GetTexture(name));
+
 			}
 		}
 		nk_end(ctx);
@@ -315,12 +332,10 @@ void GUI::renderNewObjectWindow()
 			b.name = std::string(objnamebuff);
 			if (b.name.size() != 0)
 			{
-				std::map<std::string, Texture2D>::iterator it = ResourceManager::Textures.find(name);
-				if (it == ResourceManager::Textures.end())
-				{
+				if (!ResourceManager::hasTexture(name));
 					ResourceManager::LoadTexture(std::string(objTextureName).c_str(), true, name);
 
-				}
+				
 				b.tex = ResourceManager::GetTexture(name);
 
 

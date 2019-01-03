@@ -8,63 +8,31 @@ void Map::draw()
 {
 	if (readyToDraw())
 	{
+		
 	
-		if (shouldDrawGrid)
-			drawGrid();
 
 		Shader s = ResourceManager::GetShader("sprite");
 		s.use();
 		s.setMat4("view", camera.getViewMatrix());
 		projection = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f, -1.0f, 1.0f);
 		s.setMat4("projection", projection);
+		s.setFloat("scale", scale);
+
+
+		if (bginitialized)
+		{
+			renderer->DrawSprite(BGIMAGE, glm::vec2(0, 0), glm::vec2(bounds.x * 50, bounds.y * 50));
+		}
+
 
 		for (unsigned int i = 0; i < objects.size(); i++)
 		{
 			renderer->DrawSprite(objects[i].tex, objects[i].pos, glm::vec2(50));
+			dFont.RenderText("X", objects[i].pos.x + 20, objects[i].pos.y, 0.2  * scale, glm::vec3(0));
 		}
 
-
-
-		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE && selected_token != NULL)
-		{
-
-			for (unsigned int i = 0; i < logicalGrid.size(); i++)
-			{
-				Rect r = logicalGrid[i];
-				glm::vec2 temp = r.getPos();
-				
-				glm::vec4 temp2 = glm::vec4(temp - camera.position, 0, 0 );
-
-		
-				glm::mat4 v = camera.getViewMatrix();
-			
-
-				glm::mat4 model(1);
-				model = glm::scale(glm::vec3(scale, scale, 1.0f));
-
-				
-				temp2 = v * temp2;
-				r.setPos(glm::vec2(temp2.x, temp2.y));
-				r.w = r.w * scale;
-				r.h = r.h * scale;
-
-				
-				
-				if (r.mouseOver(glm::vec2(lastX, lastY)))
-				{
-					Object b;
-					b.name = selected_token->name;
-					b.tex = selected_token->tex;
-					b.pos = temp;
-					objects.push_back(b);
-				}
-			}
-
-			selected_token = NULL;
-			dragMap = true;
-		}
-
-
+		if (shouldDrawGrid)
+			drawGrid();
 
 
 		if (selected_token != NULL)
@@ -74,9 +42,57 @@ void Map::draw()
 		
 			
 			s.setMat4("view", glm::mat4(1));
-			renderer->DrawSprite(selected_token->tex, glm::vec2((lastX - ( 50 / 2)),(lastY - ( 50 / 2))), glm::vec2(25 , 25));
+			float tscale = scale;
+			scale = 1;
+			renderer->DrawSprite(selected_token->tex, glm::vec2((lastX - 25),(lastY - 25)), glm::vec2(40 , 40));
+			scale = tscale;
 		}
 	}
+}
+
+void Map::logic()
+{
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE && selected_token != NULL)
+	{
+
+		for (unsigned int i = 0; i < logicalGrid.size(); i++)
+		{
+			Rect r = logicalGrid[i];
+			glm::vec2 temp = r.getPos();
+
+			glm::vec4 temp2 = glm::vec4(temp, 1, 1);
+
+
+
+
+
+			glm::mat4 model(1);
+			model = glm::scale(glm::vec3(scale));
+			glm::mat4 view = camera.getViewMatrix();
+			temp2 = view * model * temp2;
+			r.setPos(glm::vec2(temp2.x, temp2.y));
+			r.w = r.w * scale;
+			r.h = r.h * scale;
+
+
+
+			if (r.mouseOver(glm::vec2(lastX, lastY)))
+			{
+				Object b;
+				b.name = selected_token->name;
+				b.tex = selected_token->tex;
+				b.pos = temp;
+				objects.push_back(b);
+			}
+		}
+
+		selected_token = NULL;
+		dragMap = true;
+	}
+
+
+
+
 }
 
 void Map::init(glm::ivec2 bounds, TextureRenderer * rend)
@@ -100,6 +116,8 @@ void Map::init(glm::ivec2 bounds, TextureRenderer * rend)
 
 void Map::deleteGrid()
 {
+	glDeleteVertexArrays(1, &gridVAO);
+	glDeleteBuffers(1, &gridVBO);
 }
 
 void Map::drawGrid()
@@ -157,7 +175,9 @@ void Map::drawGrid()
 	s.use();
 	projection = glm::ortho(0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT, 0.0f, -1.0f, 1.0f);
 	s.setFloat("scale", scale);
-	s.setMat4("model", glm::mat4(1.0f));
+	glm::mat4 model(1.0f);
+	model = glm::scale(model, glm::vec3(scale));
+	s.setMat4("model", model);
 	s.setMat4("view", camera.getViewMatrix());
 	s.setMat4("projection", projection);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

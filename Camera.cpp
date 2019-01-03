@@ -9,12 +9,12 @@ Camera::Camera()
 glm::mat4 Camera::getViewMatrix()
 {
 	glm::mat4 view;
-	glm::vec2 midOffset = glm::vec2(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5);
+	glm::vec2 midOffset = glm::vec2(SCREEN_WIDTH * 0.5 , SCREEN_HEIGHT * 0.5);
 
 	view = glm::translate(view, glm::vec3(midOffset, 0.0));
 	//view = glm::rotate(view, -this->rot, glm::vec3(0.0, 0.0, 1.0));
 	view = glm::translate(view, glm::vec3(-midOffset, 0.0));
-	view = glm::translate(view, glm::vec3(-this->position, -1));
+	view = glm::translate(view, glm::vec3(-this->position, z));
 
 	return view;
 }

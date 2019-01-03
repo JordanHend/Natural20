@@ -47,6 +47,9 @@
 #endif
 
 #include "GUI.h"
+#include "Font.h"
+
+Font dFont;
 int SCREEN_HEIGHT;
 int SCREEN_WIDTH;
 int MAP_WIDTH, MAP_HEIGHT;
@@ -60,6 +63,7 @@ float lastX = SCREEN_WIDTH / 2.0f;
 float lastY = SCREEN_HEIGHT / 2.0f;
 bool firstMouse = true;
 
+bool mButtonDown = false;
 
 //Process Keyboard input.
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -172,8 +176,12 @@ int main()
 
 	//Init OpenGL
 	initOpenGL();
+	dFont = Font("Font.ttf");
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE);
 	camera.position = glm::vec2(0, 0);
 	glEnable(GL_DEBUG_OUTPUT);
+	
 	glDebugMessageCallback(MessageCallback, 0);
 	ResourceManager::LoadShader("Shader/GridVertex.shdr", "Shader/GridFrag.shdr", nullptr, "grid");
 	ResourceManager::LoadShader("Shader/sprite.vshdr", "Shader/sprite.fshdr", nullptr, "sprite");
@@ -204,6 +212,7 @@ int main()
 		TimeBetweenFrames = (currentFrame - lastFrame);
 		lastFrame = currentFrame;
 		handleCameraKeyInput(deltaTime);
+		map.logic();
 		s.use();
 	
 		a += TimeBetweenFrames;
@@ -247,6 +256,7 @@ void mouseCallback(GLFWwindow * window, double xpos, double ypos)
 	}
 
 
+
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
 		bool onWindow = false;
@@ -277,11 +287,10 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	}
 	if (!onWindow)
 	{
-		scale += yoffset * 0.05;
-		if (scale < 0.1)
-			scale = 0.1;
-		if (scale > 5)
-			scale = 5;
+		
+	 	scale += yoffset * 0.1;
+		if (scale < 0.5)
+			scale = 0.5;
 	}
 
 

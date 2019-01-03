@@ -1,9 +1,10 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (DeeNDee.vcxproj, OpenGL Start2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Map.cpp
-c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(110): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(117): warning C4018: '<': signed/unsigned mismatch
-c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(119): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(119): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(153): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(31): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(128): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(135): warning C4018: '<': signed/unsigned mismatch
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(137): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(137): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(171): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
   OpenGL Start2.vcxproj -> C:\Users\Jordan\Documents\Visual Studio 2015\Projects\OpenGL Start2\x64\Debug\Natural20.exe
   OpenGL Start2.vcxproj -> C:\Users\Jordan\Documents\Visual Studio 2015\Projects\OpenGL Start2\x64\Debug\Natural20.pdb (Partial PDB)

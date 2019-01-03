@@ -16,6 +16,8 @@ public:
 	~Camera();
 	glm::vec2 position = glm::vec2(0,0);
 	const float SPEED = 20;
+	float z = -1;
+	float zoom = 1.0f;
 private:
 
 	
