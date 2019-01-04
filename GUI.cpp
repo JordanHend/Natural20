@@ -21,6 +21,7 @@ void GUI::init(GLFWwindow * window, Map * map)
 {
 
 	this->map = map;
+	map->tokens = &tokens;
 	ctx = nk_glfw3_init(window, NK_GLFW3_INSTALL_CALLBACKS);
 	/* Load Fonts: if none of these are loaded a default font will be used  */
 	/* Load Cursor: if you uncomment cursor loading please hide the cursor */
@@ -101,7 +102,9 @@ void GUI::draw()
 					nk_layout_row_push(ctx, 160);
 					if (nk_selectable_image_text(ctx, img, tokens[i].name.c_str(), tokens[i].name.length(), NK_WINDOW_BORDER, &val))
 					{
-						map->selected_token = &tokens[i];
+						map->selected_token = new Token();
+						map->selected_token->name = tokens[i].name;
+						map->selected_token->tex = tokens[i].tex;
 					}
 					nk_layout_row_push(ctx, 20);
 					if (nk_button_label(ctx, "X"))
@@ -109,18 +112,7 @@ void GUI::draw()
 						tokens.erase(tokens.begin() + i);
 					}
 				}
-			
-
-				/*
-				nk_layout_row_dynamic(ctx, 120, 1);
-				bg = nk_color_picker(ctx, bg, NK_RGBA);
-				nk_layout_row_dynamic(ctx, 25, 1);
-				bg.r = nk_propertyf(ctx, "#R:", 0, bg.r, 1.0f, 0.01f, 0.005f);
-				bg.g = nk_propertyf(ctx, "#G:", 0, bg.g, 1.0f, 0.01f, 0.005f);
-				bg.b = nk_propertyf(ctx, "#B:", 0, bg.b, 1.0f, 0.01f, 0.005f);
-				bg.a = nk_propertyf(ctx, "#A:", 0, bg.a, 1.0f, 0.01f, 0.005f);
-				nk_combo_end(ctx);
-				*/
+		
 				nk_combo_end(ctx);
 			}
 
@@ -133,7 +125,7 @@ void GUI::draw()
 			{
 				std::string tex = openTextureFile();
 				std::string name = SplitFilename(tex);
-				if (!ResourceManager::hasTexture(name))
+				if (!ResourceManager::hasTexture(name) && tex != "")
 				{
 					ResourceManager::LoadTexture(tex.c_str(), true, name);
 				}
@@ -330,7 +322,7 @@ void GUI::renderNewObjectWindow()
 	
 			std::string name = SplitFilename(std::string(objTextureName));
 			b.name = std::string(objnamebuff);
-			if (b.name.size() != 0)
+			if (b.name.size() != 0 && std::string(objTextureName) != "")
 			{
 				if (!ResourceManager::hasTexture(name));
 					ResourceManager::LoadTexture(std::string(objTextureName).c_str(), true, name);
@@ -348,9 +340,13 @@ void GUI::renderNewObjectWindow()
 				newObjectWindow = false;
 
 			}
-			else
+			else if(b.name.size() == 0)
 			{
 				MessageBox(NULL, "Name must have 1-20 characters", "Alert", MB_ICONASTERISK | MB_OK);
+			}
+			else
+			{
+				MessageBox(NULL, "Must have icon", "Alert", MB_ICONASTERISK | MB_OK);
 			}
 		}
 		nk_spacing(ctx, 1);
@@ -373,5 +369,9 @@ void GUI::renderNewBGObjectWindow()
 }
 
 void GUI::setUpBackgroundTexture()
+{
+}
+
+void GUI::drawObjectInfoWindow()
 {
 }

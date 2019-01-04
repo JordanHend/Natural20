@@ -75,49 +75,54 @@ public:
 	
 	std::vector<Rect> windowBounds;
 
-	//GUI handlers. Done by Nuklear.
+
 	struct nk_context *ctx;
 	struct nk_colorf bg;
 	~GUI();
 private:
-	
+	//ref to map. It's editted from the GUI.
 	Map * map;
 
+	//for GM/Player layer tests. TODO: Add this.
 	int defaultLayer = 0;
 	bool showGMLayer = false;
+
+	/*Tokens that are loaded to the map. Drag them from the token list onto the map to place
+	TODO:::: Add empty token as a free token. Just place a blank token, and add details when its on the board. */
 	std::vector<Token> tokens;
 
-	struct NewObjectInfo
-	{
-		std::string name;
-		std::string texture;
-		int layer = 0;
-	};
-
-	char mapnamebuff[20];
-	char xbuff[6], ybuff[6];
+	//Rendering of menu bar + helpers.
 	void renderMenuBar();
 
 
-	
+	//The bounds of the windows of the gui. Used so that you can't interact with the map while the mouse is hovering the gui.
 	std::vector<Rect> bounds;
 
-
+	//Basically hide stuff on main draw panel, so when you're dealing with something (like adding new map or token) you dont accidentally add more stuff.
 	bool mainPanelInBackground = false;
 
+
+	//Helpers and function to render window that processes a new map.
 	bool newMapWindow = false;
+	char mapnamebuff[20];
+	char xbuff[6], ybuff[6];
 	void renderNewMap();
 
+
+	//Helpers and functions for rendering a window when adding a token to the list.
 	std::string objStrTexName = std::string();
-	char objnamebuff[20], objTextureName[200];
+	char objnamebuff[20], objTextureName[200], objSize;
 	bool newObjectWindow = false;
 	void renderNewObjectWindow();
-	NewObjectInfo objinfo;
+	
 
+	//Helpers and functions for adding a background texture to the map
 	bool newBGObjectWindow = false;
 	void renderNewBGObjectWindow();
-
 	void setUpBackgroundTexture();
+
+
+	void drawObjectInfoWindow();
 
 
 

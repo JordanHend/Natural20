@@ -9,11 +9,10 @@ Font::Font(std::string fontDirectory)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	shader = ResourceManager::GetShader("font");
+	shader = ResourceManager::GetShader("text");
 
 	// Compile and setup the shader
 
-	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(SCREEN_WIDTH), 0.0f, static_cast<GLfloat>(SCREEN_HEIGHT));
 	shader.use();
 	glUniformMatrix4fv(glGetUniformLocation(shader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
@@ -63,6 +62,7 @@ Font::Font(std::string fontDirectory)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 		// Now store character for later use
 		Character character = {
 			texture,
@@ -91,12 +91,17 @@ Font::Font(std::string fontDirectory)
 
 }
 
-void Font::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
+void Font::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale2, glm::vec3 color, bool uscale)
 {
 
 	// Activate corresponding render state	
 	shader.use();
-	glUniform3f(glGetUniformLocation(shader.ID, "textColor"), color.x, color.y, color.z);
+	glm::mat4 model(1.0f);
+	if(!uscale)
+	model = glm::scale(model, glm::vec3(scale));
+
+	shader.setMat4("model", model);
+	glUniform3f(glGetUniformLocation(shader.ID, "textColor"), color.x, color.y, color.z); 
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(VAO);
 
@@ -106,18 +111,20 @@ void Font::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm
 	{
 		Character ch = Characters[*c];
 
-		GLfloat xpos = x + ch.Bearing.x * scale;
-		GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+		GLfloat xpos = x + ch.Bearing.x * scale2;
+		GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale2;
 
-		GLfloat w = ch.Size.x * scale;
-		GLfloat h = ch.Size.y * scale;
+		GLfloat w = ch.Size.x * scale2;
+		GLfloat h = ch.Size.y * scale2;
 		// Update VBO for each character
-		float vertices[] = {
-			// positions        // texture Coords
-			-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
-			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-			1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
-			1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		GLfloat vertices[6][4] = {
+			{ xpos,     ypos + h,   0.0, 0.0 },
+			{ xpos,     ypos,       0.0, 1.0 },
+			{ xpos + w, ypos,       1.0, 1.0 },
+
+			{ xpos,     ypos + h,   0.0, 0.0 },
+			{ xpos + w, ypos,       1.0, 1.0 },
+			{ xpos + w, ypos + h,   1.0, 0.0 }
 		};
 		// Render glyph texture over quad
 		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
@@ -129,11 +136,10 @@ void Font::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm
 		// Render quad
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-		x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+		x += (ch.Advance >> 6) * scale2; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
 	}
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
 
 }
 Font::~Font()

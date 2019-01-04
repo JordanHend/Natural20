@@ -11,6 +11,7 @@ void Map::draw()
 		
 	
 
+		Shader f = ResourceManager::GetShader("text");
 		Shader s = ResourceManager::GetShader("sprite");
 		s.use();
 		s.setMat4("view", camera.getViewMatrix());
@@ -28,7 +29,11 @@ void Map::draw()
 		for (unsigned int i = 0; i < objects.size(); i++)
 		{
 			renderer->DrawSprite(objects[i].tex, objects[i].pos, glm::vec2(50));
-			dFont.RenderText("X", objects[i].pos.x + 20, objects[i].pos.y, 0.2  * scale, glm::vec3(0));
+			f.use();
+			f.setMat4("view", camera.getViewMatrix());
+			f.setMat4("projection", projection);
+			dFont.RenderText("x",objects[i].pos.x + 40, objects[i].pos.y,0.2, glm::vec3(0, 1, 0));
+			s.use();
 		}
 
 		if (shouldDrawGrid)
@@ -54,17 +59,13 @@ void Map::logic()
 {
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE && selected_token != NULL)
 	{
-
+		bool placed = false;
 		for (unsigned int i = 0; i < logicalGrid.size(); i++)
 		{
 			Rect r = logicalGrid[i];
+
 			glm::vec2 temp = r.getPos();
-
 			glm::vec4 temp2 = glm::vec4(temp, 1, 1);
-
-
-
-
 
 			glm::mat4 model(1);
 			model = glm::scale(glm::vec3(scale));
@@ -83,11 +84,97 @@ void Map::logic()
 				b.tex = selected_token->tex;
 				b.pos = temp;
 				objects.push_back(b);
+				placed = true;
+				continue;
 			}
-		}
+			
+			
 
+		}
+		if (!placed && selected_token->pos.x > -1)
+		{
+			Object b;
+			b.name = selected_token->name;
+			b.tex = selected_token->tex;
+			b.pos = selected_token->pos;
+			objects.push_back(b);
+			
+		}
+		delete(selected_token);
 		selected_token = NULL;
 		dragMap = true;
+	}
+	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && selected_token == NULL)
+	{
+
+
+		
+		Rect r;
+		for (unsigned int i = 0; i < objects.size(); i++)
+		{
+
+
+			//Delete the object?
+			r.x = objects[i].pos.x + 40;
+			r.y = objects[i].pos.y;
+			r.w = 10;
+			r.h = 10;
+
+			glm::vec2 temp = r.getPos();
+			glm::vec4 temp2 = glm::vec4(temp, 1, 1);
+
+			glm::mat4 model(1);
+			model = glm::scale(glm::vec3(scale));
+			glm::mat4 view = camera.getViewMatrix();
+			temp2 = view * model * temp2;
+			r.setPos(glm::vec2(temp2.x, temp2.y));
+			r.w = r.w * scale;
+			r.h = r.h * scale;
+
+			if (r.mouseOver(glm::vec2(lastX, lastY)))
+			{
+				objects.erase(objects.begin() + i);
+				break;
+			}
+
+			//////////////////////////////////////////////////////////////////////
+
+			//Delete the object?
+			r.x = objects[i].pos.x;
+			r.y = objects[i].pos.y;
+			r.w = 50;
+			r.h = 50;
+
+			 temp = r.getPos();
+			 temp2 = glm::vec4(temp, 1, 1);
+
+			 model = glm::mat4(1);
+			 model = glm::scale(glm::vec3(scale));
+			 view = camera.getViewMatrix();
+			temp2 = view * model * temp2;
+			r.setPos(glm::vec2(temp2.x, temp2.y));
+			r.w = r.w * scale;
+			r.h = r.h * scale;
+
+			if (r.mouseOver(glm::vec2(lastX, lastY)))
+			{
+				Object b = objects[i];
+				Token * t = new Token();
+				t->name = b.name;
+				t->pos = b.pos;
+				t->rect = b.rect;
+				t->rotation = b.rotation;
+				t->tex = b.tex;
+
+				selected_token = t;
+				objects.erase(objects.begin() + i);
+
+				break;
+			}
+
+		}
+
+
 	}
 
 

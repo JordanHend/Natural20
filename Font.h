@@ -12,7 +12,8 @@
 #include FT_FREETYPE_H 
 
 extern int SCREEN_WIDTH, SCREEN_HEIGHT;
-
+extern glm::mat4 projection;
+extern float scale;
 struct Character {
 	GLuint TextureID;   // ID handle of the glyph texture
 	glm::ivec2 Size;    // Size of glyph
@@ -29,7 +30,7 @@ public:
 
 	};
 	Font(std::string fontDirectory);
-	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color, bool uscale = false);
 	
 	~Font();
 

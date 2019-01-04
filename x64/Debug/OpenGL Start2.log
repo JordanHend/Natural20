@@ -1,10 +1,43 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (DeeNDee.vcxproj, OpenGL Start2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Main.cpp
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\nuklear.h(221): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
+  c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\nuklear.h(221): note: command-line arguments:  see previous definition of '_CRT_SECURE_NO_WARNINGS'
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\nuklear_glfw_gl3.h(320): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: 'APIENTRY': macro redefinition
+  c:\users\jordan\documents\c++ libraries\glfw-3.2.1.bin.win64\glfw-3.2.1.bin.win64\include\glfw\glfw3.h(98): note: see previous definition of 'APIENTRY'
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\main.cpp(224): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\main.cpp(226): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\main.cpp(258): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\main.cpp(258): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\main.cpp(288): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\main.cpp(289): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\main.cpp(306): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\main.cpp(306): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\main.cpp(308): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\main.cpp(309): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\main.cpp(326): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\main.cpp(328): warning C4305: '=': truncation from 'double' to 'float'
+  GUI.cpp
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\nuklear.h(221): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
+  c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\nuklear.h(221): note: command-line arguments:  see previous definition of '_CRT_SECURE_NO_WARNINGS'
+c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: 'APIENTRY': macro redefinition
+  c:\users\jordan\documents\c++ libraries\glfw-3.2.1.bin.win64\glfw-3.2.1.bin.win64\include\glfw\glfw3.h(98): note: see previous definition of 'APIENTRY'
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\gui.cpp(72): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\gui.cpp(103): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\gui.cpp(148): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\gui.cpp(189): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\gui.cpp(265): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\gui.cpp(306): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\gui.cpp(327): warning C4390: ';': empty controlled statement found; is this the intent?
+  Generating Code...
+  Compiling...
   Map.cpp
-c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(31): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(128): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(135): warning C4018: '<': signed/unsigned mismatch
-c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(137): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(137): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(171): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(35): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(215): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(222): warning C4018: '<': signed/unsigned mismatch
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(224): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(224): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\jordan\documents\visual studio 2015\projects\opengl start2\opengl start2\map.cpp(258): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+  Generating Code...
   OpenGL Start2.vcxproj -> C:\Users\Jordan\Documents\Visual Studio 2015\Projects\OpenGL Start2\x64\Debug\Natural20.exe
   OpenGL Start2.vcxproj -> C:\Users\Jordan\Documents\Visual Studio 2015\Projects\OpenGL Start2\x64\Debug\Natural20.pdb (Partial PDB)

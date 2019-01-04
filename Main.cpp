@@ -49,6 +49,8 @@
 #include "GUI.h"
 #include "Font.h"
 
+
+//These members are usually extern'd into other files. I know this is bad practice but it's just the quickest way for now.
 Font dFont;
 int SCREEN_HEIGHT;
 int SCREEN_WIDTH;
@@ -56,8 +58,12 @@ int MAP_WIDTH, MAP_HEIGHT;
 glm::mat4 projection;
 GLFWwindow * window;
 Camera camera;
+
+
 TextureRenderer * renderer;
 Map map;
+
+
 //Mouse input
 float lastX = SCREEN_WIDTH / 2.0f;
 float lastY = SCREEN_HEIGHT / 2.0f;
@@ -82,6 +88,7 @@ float scale = 1.0f;
 
 void APIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
+	//This can get annoying if it outputs for EVERYTHING-- only print when theres an error.
 	if(type == GL_DEBUG_TYPE_ERROR)
 	fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n\n",
 		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
@@ -176,59 +183,87 @@ int main()
 
 	//Init OpenGL
 	initOpenGL();
-	dFont = Font("Font.ttf");
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_ONE, GL_ONE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	camera.position = glm::vec2(0, 0);
+
 	glEnable(GL_DEBUG_OUTPUT);
-	
 	glDebugMessageCallback(MessageCallback, 0);
+
+	//Setting up shaders.
 	ResourceManager::LoadShader("Shader/GridVertex.shdr", "Shader/GridFrag.shdr", nullptr, "grid");
 	ResourceManager::LoadShader("Shader/sprite.vshdr", "Shader/sprite.fshdr", nullptr, "sprite");
-	
+	ResourceManager::LoadShader("Shader/textVertex.shdr", "Shader/textFragment.shdr", nullptr, "text");
+
+	//Setting up Font
+	dFont = Font("Font.ttf");
+
+	//Getting shaders for some rendering being done here.
+	Shader f = ResourceManager::GetShader("text");
 	Shader s = ResourceManager::GetShader("sprite");
+
+	//Init renderer
 	renderer = new TextureRenderer(ResourceManager::GetShader("sprite"));
+
+	//Map has reference to the renderer.
 	map.setRenderer(renderer);
+
+
 	//Create GUI
 	gui.init(window, &map);
-
-	
-	//TEST
-	MAP_WIDTH = 10;
-	MAP_HEIGHT = 10;
 
 	//Timer for fps.
 	Timer timer;
 	timer.start();
 	timer.unpause();
-	float TimeBetweenFrames = 0, lastFrame = 0, FPS = 0, a = 0;
+	float TimeBetweenFrames = 0, lastFrame = 0, FPS = 0;
 
 	while (!glfwWindowShouldClose(window))
 	{
 		float deltaTime = timer.getTicks() / 1000;
 		timer.start();
 		float currentFrame = glfwGetTime();
-
+		FPS = (1 / deltaTime);
 		TimeBetweenFrames = (currentFrame - lastFrame);
 		lastFrame = currentFrame;
+		FPS = (1 / TimeBetweenFrames);
+
+
+		//Move camera with wasd
 		handleCameraKeyInput(deltaTime);
+
+		//Handle logic of mouse clicks on map.
 		map.logic();
+
+	
+
+		//Sprite shader
 		s.use();
 	
-		a += TimeBetweenFrames;
-		FPS = (1 / TimeBetweenFrames);
-	
-		//Draw gui
+
+		//Draw gui (using nuklear)
 		gui.draw();
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
 
+		//Set view and projection to be the correct projection for screen space coordinates. 
+		f.use();
+		f.setMat4("view", glm::mat4(1));
+		glm::mat4 proj = glm::ortho(0.0f, (float)SCREEN_WIDTH, 0.0f, (float)SCREEN_HEIGHT);
+		f.setMat4("projection", proj);
+
+		//Render fps to screen space.
+		dFont.RenderText(std::to_string(FPS), SCREEN_WIDTH - 120, 40, 0.2, glm::vec3(0.7, 0.7, 0.2), true);
+
+		//Draw the map (objects on board and grid)
 		map.draw();
 
 		//Present gui
 		nk_glfw3_render(NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
+
+		//Swap buffers.
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
@@ -289,8 +324,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	{
 		
 	 	scale += yoffset * 0.1;
-		if (scale < 0.5)
-			scale = 0.5;
+		if (scale < 0.1)
+			scale = 0.1;
 	}
 
 
