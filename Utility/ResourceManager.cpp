@@ -4,7 +4,7 @@
 #include <sstream>
 #include <fstream>
 
-#include "Includes\stb_image.h"
+#include "../Includes\stb_image.h"
 
 std::string SplitFilename(const std::string& str)
 {

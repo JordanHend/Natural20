@@ -1,15 +1,15 @@
 #ifndef DND_MAP_H
 #define DND_MAP_H
 
-#include "Camera.h"
-#include "ResourceManager.h"
-#include "TextureRenderer.h"
+#include "../Utility/Camera.h"
+#include "../Utility/ResourceManager.h"
+#include "../Rendering/TextureRenderer.h"
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/quaternion.hpp>
-#include "Rect.h"
-#include "Font.h"
+#include "../Utility/Rect.h"
+#include "../Utility/Font.h"
 
 
 struct Object

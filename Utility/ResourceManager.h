@@ -8,8 +8,8 @@
 #include <glfw3.h>
 #include <glad\glad.h>
 
-#include "Texture2D.h"
-#include "Shader/Shader.h"
+#include "../Rendering/Texture2D.h"
+#include "../Shader/Shader.h"
 
 
 std::string SplitFilename(const std::string& str);

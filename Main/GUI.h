@@ -13,7 +13,7 @@
 #include <time.h>
 
 
-#include "TextureRenderer.h"
+#include "../Rendering/TextureRenderer.h"
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -44,15 +44,15 @@
 #define NK_INCLUDE_FONT_BAKING
 #define NK_INCLUDE_DEFAULT_FONT
 #define NK_KEYSTATE_BASED_INPUT
-#include "nuklear.h"
-#include "nuklear_glfw_gl3.h"
+#include "../nuklear.h"
+#include "../nuklear_glfw_gl3.h"
 #endif
 
-#include "Texture2D.h"
-#include "Rect.h"
-#include "OpenFile.h"
-#include "ResourceManager.h"
-#include "Map.h"
+#include "../Rendering/Texture2D.h"
+#include "../Utility/Rect.h"
+#include "../Utility/OpenFile.h"
+#include "../Utility/ResourceManager.h"
+#include "../Main/Map.h"
 
 
 

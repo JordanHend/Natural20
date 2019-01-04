@@ -19,40 +19,39 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\OpenGL_Test\OpenGL_Test\glad.c" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Font.cpp" />
-    <ClCompile Include="GUI.cpp" />
+    <ClCompile Include="glad.c" />
     <ClCompile Include="Includes\stb_image.cpp" />
-    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Map.cpp" />
-    <ClCompile Include="OpenFile.cpp" />
-    <ClCompile Include="Rect.cpp" />
-    <ClCompile Include="ResourceManager.cpp" />
-    <ClCompile Include="Shader\Shader.cpp" />
+    <ClCompile Include="Main\GUI.cpp" />
+    <ClCompile Include="Main\Map.cpp" />
     <ClCompile Include="nuklear.cpp" />
-    <ClCompile Include="Texture2D.cpp" />
-    <ClCompile Include="TextureRenderer.cpp" />
-    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Rendering\Texture2D.cpp" />
+    <ClCompile Include="Rendering\TextureRenderer.cpp" />
+    <ClCompile Include="Shader\Shader.cpp" />
+    <ClCompile Include="Utility\Camera.cpp" />
+    <ClCompile Include="Utility\Font.cpp" />
+    <ClCompile Include="Utility\InputManager.cpp" />
+    <ClCompile Include="Utility\OpenFile.cpp" />
+    <ClCompile Include="Utility\Rect.cpp" />
+    <ClCompile Include="Utility\ResourceManager.cpp" />
+    <ClCompile Include="Utility\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Font.h" />
-    <ClInclude Include="GUI.h" />
     <ClInclude Include="Includes\stb_image.h" />
-    <ClInclude Include="Includes\stb_image_write.h" />
-    <ClInclude Include="InputManager.h" />
-    <ClInclude Include="Map.h" />
+    <ClInclude Include="Main\GUI.h" />
+    <ClInclude Include="Main\Map.h" />
     <ClInclude Include="nuklear.h" />
     <ClInclude Include="nuklear_glfw_gl3.h" />
-    <ClInclude Include="OpenFile.h" />
-    <ClInclude Include="Rect.h" />
-    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Rendering\Texture2D.h" />
+    <ClInclude Include="Rendering\TextureRenderer.h" />
     <ClInclude Include="Shader\Shader.h" />
-    <ClInclude Include="Texture2D.h" />
-    <ClInclude Include="TextureRenderer.h" />
-    <ClInclude Include="Timer.h" />
+    <ClInclude Include="Utility\Camera.h" />
+    <ClInclude Include="Utility\Font.h" />
+    <ClInclude Include="Utility\InputManager.h" />
+    <ClInclude Include="Utility\OpenFile.h" />
+    <ClInclude Include="Utility\Rect.h" />
+    <ClInclude Include="Utility\ResourceManager.h" />
+    <ClInclude Include="Utility\Timer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{e75ab9ed-22bc-41bf-96d5-534ec387316f}</ProjectGuid>

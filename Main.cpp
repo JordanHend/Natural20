@@ -6,9 +6,9 @@
 
 
 
-#include "Timer.h"
-#include "ResourceManager.h"
-#include "Camera.h"
+#include "Utility/Timer.h"
+#include "Utility/ResourceManager.h"
+#include "Utility/Camera.h"
 
 //Math headers
 #include <glm/glm.hpp>
@@ -46,8 +46,8 @@
 #include "nuklear_glfw_gl3.h"
 #endif
 
-#include "GUI.h"
-#include "Font.h"
+#include "Main/GUI.h"
+#include "Utility/Font.h"
 
 
 //These members are usually extern'd into other files. I know this is bad practice but it's just the quickest way for now.

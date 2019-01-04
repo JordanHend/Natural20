@@ -6,7 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include "Texture2D.h"
-#include "Shader\Shader.h"
+#include "../Shader\Shader.h"
 extern float scale;
 class TextureRenderer
 {
